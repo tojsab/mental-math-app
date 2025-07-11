@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Math Mastery</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      color: #003366;
+      text-align: center;
+      padding: 20px;
+    }
+    .lesson-box {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-top: 15px;
+    }
+    input {
+      font-size: 16px;
+      padding: 5px;
+      margin: 5px;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0055a5;
+    }
+    .score {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #006400;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Mastering Mental Math</h1>
+  <div class="lesson-box">
+    <h2 id="lesson-title"></h2>
+    <p id="lesson-content"></p>
+    <div class="question" id="quiz-section" style="display: none;">
+      <label id="question-text"></label><br />
+      <input type="text" id="answer" />
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
+    <button onclick="nextLesson()">Next Lesson ▶</button>
+    <div class="score" id="score-summary"></div>
+  </div>
+
+  <script>
+    const lessons = [
+      ["Lesson 1: Introduction", "Estimate 365 × 24 → 370 × 24 = 8880<br>Magic Trick: Pick a number, double it, add 10, halve it, subtract original → Always 5!", null],
+      ["Lesson 2: Addition/Subtraction", "Use place value and compensation.<br>Examples:<br>673 + 489 = 1162<br>998 + 237 = 1235", ["What is 687 + 415?", 1102]],
+      ["Lesson 3: Multiplication", "Multiply by 11: 53 × 11 → 5(5+3)3 = 583<br>Square 35² = 1225", ["What is 47 × 11?", 517]],
+      ["Lesson 4: Division", "Divide by 5: 135 ÷ 5 = 27<br>Chunking: 192 ÷ 6 = 32", ["What is 144 ÷ 12?", 12]],
+      ["Lesson 5: Powers", "Square 43² = 1849<br>Cube root of 343 = 7", ["What is 12²?", 144]],
+      ["Lesson 6: Fractions/Percent", "1/8 = 12.5%, 5/8 = 62.5%<br>15% of $48 = 7.20", ["What is 10% of 90?", 9]],
+      ["Lesson 7: Patterns", "111² = 12321<br>37 × 27 = 999", ["What is the square of 21?", 441]],
+      ["Lesson 8: Practice", "Practice questions to test speed and logic.<br>24 Game: Use 8,3,3,1 → ((8 / (3 - 1)) * 3) = 24", ["What is 122 ÷ 4?", 30.5]]
+    ];
+
+    let currentLesson = 0;
+    let score = 0;
+    let total = 0;
+
+    function loadLesson() {
+      const [title, content, quiz] = lessons[currentLesson];
+      document.getElementById("lesson-title").innerHTML = title;
+      document.getElementById("lesson-content").innerHTML = content;
+      if (quiz) {
+        document.getElementById("quiz-section").style.display = "block";
+        document.getElementById("question-text").innerText = quiz[0];
+        document.getElementById("answer").value = "";
+        document.getElementById("answer").dataset.correct = quiz[1];
+      } else {
+        document.getElementById("quiz-section").style.display = "none";
+      }
+      updateScore();
+    }
+
+    function nextLesson() {
+      if (currentLesson < lessons.length - 1) {
+        currentLesson++;
+        loadLesson();
+      } else {
+        updateScore();
+        alert("🎉 You've completed all lessons!");
+      }
+    }
+
+    function submitAnswer() {
+      const correct = parseFloat(document.getElementById("answer").dataset.correct);
+      const userInput = parseFloat(document.getElementById("answer").value);
+      if (isNaN(userInput)) {
+        alert("❌ Please enter a valid number.");
+        return;
+      }
+      total++;
+      if (userInput === correct) {
+        alert("✅ Correct!");
+        score++;
+      } else {
+        alert("❌ Incorrect. The correct answer is " + correct);
+      }
+      updateScore();
+    }
+
+    function updateScore() {
+      document.getElementById("score-summary").innerText = `Score: ${score} out of ${total} questions answered correctly.`;
+    }
+
+    window.onload = loadLesson;
+  </script>
+</body>
+</html>
